@@ -4,21 +4,20 @@ import os
 import time
 import logging
 
-OUTPUT_DIR = 'xc'
 API_KEY = os.getenv('XENO_CANTO_API_KEY')
 if not API_KEY:
     raise EnvironmentError("XENO_CANTO_API_KEY environment variable is not set.")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(BASE_DIR, 'xc')
-
+LOG_DIR = os.path.dirname(OUTPUT_DIR)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 logger.propagate = False
 
-file_handler = logging.FileHandler(os.path.join(OUTPUT_DIR, 'xc_downloader.log'), encoding='utf-8', mode='w')
+file_handler = logging.FileHandler(os.path.join(LOG_DIR, 'xc_downloader.log'), encoding='utf-8', mode='w')
 file_handler.setLevel(logging.INFO)
 file_handler.setFormatter(logging.Formatter('%(asctime)s | %(levelname)s :: %(message)s'))
 logger.addHandler(file_handler)
