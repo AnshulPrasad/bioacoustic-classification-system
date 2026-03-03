@@ -1,5 +1,6 @@
 .venv
 xc/
+dataset/xc_downloader.log
 .idea
 pyproject.toml
 uv.lock
