@@ -2,10 +2,12 @@ import csv
 import requests
 import os
 import time
+from dotenv import load_dotenv
 
+load_dotenv()
 API_KEY = os.getenv('XENO_CANTO_API_KEY')
 if not API_KEY:
-    from configs.config import API_KEY
+    raise ValueError("XENO_CANTO_API_KEY is not set")
 
 OUTPUT_DIR = '../data/raw'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
