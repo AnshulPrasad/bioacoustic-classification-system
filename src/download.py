@@ -6,7 +6,7 @@ import logging
 
 API_KEY = os.getenv('XENO_CANTO_API_KEY')
 if not API_KEY:
-    raise EnvironmentError("XENO_CANTO_API_KEY environment variable is not set.")
+    from configs.config import API_KEY
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(BASE_DIR, '../data/raw')
