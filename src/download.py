@@ -142,25 +142,3 @@ class Species:
 
         logger.info("Downloaded %d recordings for %s", len(self.rows), self.english_name)
         self.write_csv()
-
-
-SPECIES_LIST = [
-    ("Eudynamys scolopaceus", "Asian Koel"),
-    ("Copsychus saularis",    "Oriental Magpie Robin"),
-    ("Pycnonotus cafer",      "Red-vented Bulbul"),
-    ("Acridotheres tristis",  "Common Myna"),
-    ("Pavo cristatus",        "Indian Peafowl"),
-    ("Psittacula krameri",    "Rose-ringed Parakeet"),
-    ("Athene brama",          "Spotted Owlet"),
-    ("Halcyon smyrnensis",    "White-throated Kingfisher"),
-    ("Hierococcyx varius",    "Common Hawk-Cuckoo"),
-    ("Pycnonotus jocosus",    "Red-whiskered Bulbul")
-]
-
-for sci_name, common_name in SPECIES_LIST:
-    try:
-        Species(sci_name).download()
-    except ValueError as e:
-        logger.warning("Skipping %s: %s", common_name, e)
-    except Exception as e:
-        logger.error("Unexpected error for %s: %s", common_name, e)
