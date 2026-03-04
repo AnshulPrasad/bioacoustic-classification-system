@@ -1,15 +1,19 @@
 import librosa
+import yaml
+import shutil
 from pathlib import Path
-
 from preprocess import Preprocessor
 from download import Species
-from configs.config import SPECIES_LIST
 from features import FeatureExtractor
 from sklearn.model_selection import train_test_split
-import shutil
-
 from logger import get_logger
 logger = get_logger(__name__, 'pipeline.log')
+
+
+config_path = Path("../configs/config.yaml")  # change path if needed
+with open(config_path, "r", encoding="utf-8") as f:
+    config = yaml.safe_load(f)
+SPECIES_LIST = [(s['scientific_name'], s['common_name']) for s in config['species_list']]
 
 def download():
     for sci_name, common_name in SPECIES_LIST:
@@ -72,7 +76,7 @@ def split_dataset(species_dir, output_dir, splits=(0.7, 0.15, 0.15)):
             shutil.copy(f, dest)
 
 if __name__ == "__main__":
-    # download()
+    download()
     preprocess()
-    # feature_extraction()
-    # split_dataset('../data/spectrograms/all', '../data/spectrograms')
+    feature_extraction()
+    split_dataset('../data/spectrograms/all', '../data/spectrograms')
