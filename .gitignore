@@ -1,6 +1,7 @@
 .venv
-xc/
-dataset/xc_downloader.log
+data
+logs
 .idea
 pyproject.toml
 uv.lock
+.env
