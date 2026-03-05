@@ -2,13 +2,19 @@ import librosa
 import yaml
 import shutil
 from pathlib import Path
-from preprocess import Preprocessor
-from download import Species
-from features import FeatureExtractor
 from sklearn.model_selection import train_test_split
+from torch.utils.data import DataLoader
+
 from logger import get_logger
 logger = get_logger(__name__, 'pipeline.log')
-
+from download import Species
+from preprocess import Preprocessor
+from features import FeatureExtractor
+from dataset import BirdSoundDataset
+from model import build_model
+from train import Train
+from evaluate import Evaluator
+from predict import Predictor
 
 config_path = Path("../configs/config.yaml")  # change path if needed
 with open(config_path, "r", encoding="utf-8") as f:
@@ -77,8 +83,44 @@ def split_dataset(species_dir, output_dir, splits=(0.7, 0.15, 0.15)):
             dest.touch()
             shutil.copy(f, dest)
 
+def dataset(split):
+    obj = BirdSoundDataset('../data/spectrograms', split=split)
+    images, labels = [], []
+    for idx in range(obj.__len__()):
+        images.append(obj[idx][0])
+        labels.append(obj[idx][1])
+    loader = DataLoader(obj, batch_size=32, shuffle=True, num_workers=4)
+    return loader, images, labels
+
+def model():
+    return build_model(len(SPECIES_LIST))
+
+def train(model, train_loader, val_loader):
+    obj = Train(model, train_loader, val_loader)
+    obj.train()
+
+def evaluate(model, test_loader):
+    class_names = SPECIES_LIST.keys()
+    obj = Evaluator(model, test_loader, class_names)
+    obj.evaluate()
+
+def predict():
+    obj = Predictor()
+    obj.to_tensor()
+    obj.load()
+    obj.evaluate()
+    obj.predict()
+
+
 if __name__ == "__main__":
-    download()
-    preprocess()
-    feature_extraction()
-    split_dataset('../data/spectrograms/all', '../data/spectrograms')
+    # download()
+    # preprocess()
+    # feature_extraction()
+    # split_dataset('../data/spectrograms/all', '../data/spectrograms')
+    train_loader, train_images, train_labels = dataset('train')
+    val_loader, val_images, val_labels = dataset('val')
+    test_loader, test_images, test_labels = dataset('test')
+    model = model()
+    train(model, train_loader, val_loader)
+    evaluate(model, test_loader)
+    predict()
