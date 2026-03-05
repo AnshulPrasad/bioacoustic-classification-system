@@ -21,6 +21,7 @@ class Train:
         self.epochs = epochs
         self.lr = lr
         self.best_val_acc = 0
+
     def train_one_epoch(self, epoch):
         self.model.train()
         for images, labels in self.train_loader:
@@ -31,7 +32,6 @@ class Train:
             self.optimizer.step()
 
         logger.info('Trained Epoch: {}'.format(epoch))
-        return
 
     def validate_one_epoch(self, epoch):
         self.model.eval()
@@ -53,8 +53,6 @@ class Train:
             torch.save(self.model.state_dict(), 'models/checkpoints/best_model.pth')
 
     def train(self):
-        optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
-        criterion = nn.CrossEntropyLoss()
 
         for epoch in range(self.epochs):
             self.train_one_epoch(epoch) # --- Training ---
