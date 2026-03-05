@@ -17,9 +17,13 @@ def get_logger(name: str, log_file: str) -> logging.Logger:
 
     if not logger.handlers:
         handler = FlushFileHandler(LOG_PATH, encoding='utf-8', mode='w')
-        handler.setFormatter(logging.Formatter(
+        formatter = logging.Formatter(
             '%(asctime)s | %(name)s | %(levelname)s :: %(message)s'
-        ))
+        )
+        handler.setFormatter(formatter)
         logger.addHandler(handler)
 
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
     return logger
