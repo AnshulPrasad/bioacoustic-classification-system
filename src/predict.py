@@ -29,7 +29,7 @@ class Predictor:
         model.load_state_dict(torch.load(self.model_path))
         return model
 
-    def predict(self,model, tensor):
+    def evaluate(self,model, tensor):
         model.eval()
         with torch.no_grad():
             probs = torch.softmax(model(tensor), dim=1)
@@ -43,5 +43,5 @@ class Predictor:
 
         tensor = self.to_tensor(mel_db)
         model = self.load()
-        pred, probs = self.predict(model, tensor)
+        pred, probs = self.evaluate(model, tensor)
         logger.info(f"Predicted: {self.class_names[pred]} ({probs[0][pred]:.2%} confidence)")
