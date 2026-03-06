@@ -20,6 +20,16 @@ class BirdSoundDataset(Dataset):
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.5], std=[0.5])
         ])
+    def load_all_metadata(self):
+        df = pd.concat(
+            [pd.read_csv(f, usecols=['id', 'type']) for f in Path("../data/raw").glob("*.csv")],
+            ignore_index=True
+        )
+        le = LabelEncoder()
+        df['label'] = le.fit_transform(df['type'])
+        df['id'] = df['id'].astype(str)
+        return df.set_index('id')['label']  # id → int label
+
 
     def __len__(self):
         return len(self.files)
