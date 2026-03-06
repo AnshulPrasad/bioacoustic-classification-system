@@ -54,6 +54,8 @@ class Train:
     def save_best_model(self, val_acc):
         if val_acc > self.best_val_acc:
             self.best_val_acc = val_acc
+            Path('../models/checkpoints').mkdir(parents=True, exist_ok=True)
+            torch.save(self.model.state_dict(), '../models/checkpoints/best_model.pth')
 
     def train(self):
 
