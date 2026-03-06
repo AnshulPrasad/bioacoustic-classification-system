@@ -101,7 +101,7 @@ def split_dataset(species_dir, output_dir, splits=(0.7, 0.15, 0.15)):
 def dataset(split):
     obj = BirdSoundDataset('../data/splited', split=split)
     loader = DataLoader(obj, batch_size=32, shuffle=True, num_workers=4)
-    return loader
+    return loader, obj
 
 def model(num_classes):
     obj = Model()
@@ -134,6 +134,10 @@ if __name__ == "__main__":
     val_loader, val_images, val_labels = dataset('val')
     test_loader, test_images, test_labels = dataset('test')
     model = model()
+    train_loader, train_dataset = dataset('train')
+    val_loader, _ = dataset('val')
+    test_loader, _ = dataset('test')
+    model = model(max(set(train_dataset.labels))) # num_classes from train dataset
     train(model, train_loader, val_loader)
     evaluate(model, test_loader)
     predict()
