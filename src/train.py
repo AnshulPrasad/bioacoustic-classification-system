@@ -51,6 +51,9 @@ class Train:
         if val_acc > best_val_acc:
             best_val_acc = val_acc
             torch.save(self.model.state_dict(), 'models/checkpoints/best_model.pth')
+    def save_best_model(self, val_acc):
+        if val_acc > self.best_val_acc:
+            self.best_val_acc = val_acc
 
     def train(self):
 
