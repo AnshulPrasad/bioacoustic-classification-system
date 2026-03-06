@@ -103,8 +103,10 @@ def dataset(split):
     loader = DataLoader(obj, batch_size=32, shuffle=True, num_workers=4)
     return loader
 
-def model():
-    return build_model(len(SPECIES_LIST))
+def model(num_classes):
+    obj = Model()
+    logger.info("Model created")
+    return obj.build_model(num_classes)
 
 def train(model, train_loader, val_loader):
     obj = Train(model, train_loader, val_loader)
