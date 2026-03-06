@@ -24,20 +24,19 @@ class BirdSoundDataset(Dataset):
         ])
 
     def load_all_metadata(self):
-        df = pd.concat(
-            [pd.read_csv(f, usecols=['id', 'type']) for f in Path("../data/raw").glob("*.csv")],
-            ignore_index=True
-        )
+        logger.info('Loading all metadata')
         df = pd.concat([pd.read_csv(f, usecols=['id', 'type']) for f in sorted(Path("../data/raw").glob("*.csv"))],ignore_index=True)
         le = LabelEncoder()
         df['id'] = df['id'].astype(str)
         df['label'] = le.fit_transform(df['type'])
-        df['id'] = df['id'].astype(str)
         self.num_classes = df['label'].max() + 1
+        logger.info('Loaded all metadata')
         return df.set_index('id')['label']  # id → int label
 
     def labels_int(self):
+        logger.info('Loading labels')
         ids = [file.stem.split('_')[-3] for file in self.files]  # extract all IDs at once
+        logger.info('Loaded labels')
         return self.load_all_metadata().reindex(ids, fill_value=-1).tolist()
 
     def __len__(self):
