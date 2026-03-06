@@ -85,8 +85,8 @@ def feature_extraction():
 
 def split_dataset(species_dir, output_dir, splits=(0.7, 0.15, 0.15)):
     files = list(Path(species_dir).rglob("*.png"))  # mel spectrogram images
-    logger.info(len(files))
-    train, temp = train_test_split(files, test_size=1 - splits[0], random_state=42)
+    logger.info("Total files in the dataset: %d",len(files))
+    train, temp = train_test_split(files, test_size=1-splits[0], random_state=42)
     val, test = train_test_split(temp, test_size=0.5, random_state=42)
 
     for split_name, split_files in [("train", train), ("val", val), ("test", test)]:
