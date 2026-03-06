@@ -23,6 +23,7 @@ class Train:
         self.best_val_acc = 0
 
     def train_one_epoch(self, epoch):
+        logger.info("Training epoch: %d", epoch)
         self.model.train()
         for images, labels in self.train_loader:
             images, labels = images.to(self.device), labels.to(self.device)
@@ -30,10 +31,10 @@ class Train:
             loss = self.criterion(self.model(images), labels)
             loss.backward()
             self.optimizer.step()
-
-        logger.info('Trained Epoch: {}'.format(epoch))
+        logger.info("Trained epoch: %d", epoch)
 
     def validate_one_epoch(self, epoch):
+        logger.info("Validating epoch: %d", epoch)
         self.model.eval()
         correct, total = 0, 0
         with torch.no_grad():
@@ -45,21 +46,22 @@ class Train:
 
         val_acc = correct / total
         logger.info("Epoch %d | Val Acc: %.4f", epoch + 1, val_acc)
+        logger.info("Validated epoch: %d", epoch)
         return val_acc
 
-    def save_best_model(self, val_acc, best_val_acc):
-        if val_acc > best_val_acc:
-            best_val_acc = val_acc
-            torch.save(self.model.state_dict(), 'models/checkpoints/best_model.pth')
     def save_best_model(self, val_acc):
+        logger.info("Saving best model...")
         if val_acc > self.best_val_acc:
             self.best_val_acc = val_acc
             Path('../models/checkpoints').mkdir(parents=True, exist_ok=True)
             torch.save(self.model.state_dict(), '../models/checkpoints/best_model.pth')
+        logger.info("Saved best model")
 
     def train(self):
-
+        logger.info("Training...")
         for epoch in range(self.epochs):
             self.train_one_epoch(epoch) # --- Training ---
             val_acc = self.validate_one_epoch(epoch) # --- Validation ---
             self.save_best_model(val_acc, self.best_val_acc) # Save best model
+
+        logger.info("Trained")
