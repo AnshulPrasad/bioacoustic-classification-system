@@ -72,6 +72,9 @@ def feature_extraction():
                     mel_db = obj.generate_melspectrogram(audio_version)
                     file_path = Path(f"{audio_path.stem}{version_name}").with_suffix('.png')
                     output_path = folder_path / file_path
+                    if output_path.exists():
+                        logger.info("Already exist: %s", output_path)
+                        continue
                     obj.save_spectrogram(mel_db, output_path)
                     logger.info("Saved: %s", output_path)
 
