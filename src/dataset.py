@@ -44,6 +44,5 @@ class BirdSoundDataset(Dataset):
 
     def __getitem__(self, idx):
         path = self.files[idx]
-        label = self.class_to_idx[path.name]
         image = Image.open(path).convert('RGB')
-        return self.transform(image), label
+        return self.transform(image), self.labels[idx]
