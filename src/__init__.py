@@ -99,13 +99,9 @@ def split_dataset(species_dir, output_dir, splits=(0.7, 0.15, 0.15)):
             shutil.copy(f, file_path)
 
 def dataset(split):
-    obj = BirdSoundDataset('../data/spectrograms', split=split)
-    images, labels = [], []
-    for idx in range(obj.__len__()):
-        images.append(obj[idx][0])
-        labels.append(obj[idx][1])
+    obj = BirdSoundDataset('../data/splited', split=split)
     loader = DataLoader(obj, batch_size=32, shuffle=True, num_workers=4)
-    return loader, images, labels
+    return loader
 
 def model():
     return build_model(len(SPECIES_LIST))
