@@ -28,6 +28,7 @@ class BirdSoundDataset(Dataset):
             [pd.read_csv(f, usecols=['id', 'type']) for f in Path("../data/raw").glob("*.csv")],
             ignore_index=True
         )
+        df = pd.concat([pd.read_csv(f, usecols=['id', 'type']) for f in sorted(Path("../data/raw").glob("*.csv"))],ignore_index=True)
         le = LabelEncoder()
         df['label'] = le.fit_transform(df['type'])
         df['id'] = df['id'].astype(str)
