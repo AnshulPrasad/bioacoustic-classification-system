@@ -19,3 +19,13 @@ species_list:
     common_name: "Common Hawk-Cuckoo"
   - scientific_name: "Pycnonotus jocosus"
     common_name: "Red-whiskered Bulbul"
+
+labels:
+  - label: "song"
+    int: 0
+  - label: "call"
+    int: 1
+  - label: "call, song"
+    int: 2
+  - label: "call, nocturnal call"
+    int: 3
