@@ -115,6 +115,8 @@ def train(model, train_loader, val_loader):
 def evaluate(test_loader, num_classes):
     obj = Evaluator(test_loader, num_classes)
     obj.evaluate()
+    obj.confusion_matrix()
+    obj.classify_report()
 
 def predict():
     obj = Predictor()
