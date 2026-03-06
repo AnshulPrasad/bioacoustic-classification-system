@@ -4,10 +4,15 @@
 # - Per-species accuracy
 # - Save plots to outputs/
 
-from sklearn.metrics import classification_report, confusion_matrix
+import torch
 import matplotlib.pyplot as plt
 import seaborn as sns
-import torch
+from pathlib import Path
+from sklearn.metrics import classification_report, confusion_matrix
+from logger import get_logger
+logger = get_logger(__name__, 'pipeline.log')
+
+from model import Model
 
 class Evaluator:
     def __init__(self, test_loader, num_classes):
