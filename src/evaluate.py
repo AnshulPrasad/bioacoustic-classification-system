@@ -15,6 +15,10 @@ class Evaluator:
         self.class_names = list(range(num_classes))
         self.all_preds = []
         self.all_labels = []
+        obj = Model()
+        self.model = obj.build_model(len(self.class_names)) # build a new model
+        state = torch.load('../models/checkpoints/best_model.pth')
+        self.model.load_state_dict(state)
 
     def classify_report(self):
         # Classification report
