@@ -21,14 +21,15 @@ class Evaluator:
         self.model.load_state_dict(state)
 
     def classify_report(self):
-        # Classification report
-        print(classification_report(self.all_labels, self.all_preds, target_names=self.class_names))
+        logger.info('Preparing classification report...')
         logger.info(classification_report(self.all_labels, self.all_preds, target_names=self.present_names))
+        logger.info('Prepared classification report')
 
     def confusion_matrix(self):
         cm = confusion_matrix(self.all_labels, self.all_preds)
         plt.figure(figsize=(12, 10))
         sns.heatmap(cm, annot=True, fmt='d', xticklabels=self.class_names, yticklabels=self.class_names)
+        sns.heatmap(cm, annot=True, fmt='d', xticklabels=self.present_names, yticklabels=self.present_names)
         plt.savefig('../outputs/confusion_matrix.png')
 
     def evaluate(self):
