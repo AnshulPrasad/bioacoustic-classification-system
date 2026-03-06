@@ -127,14 +127,9 @@ def predict():
 
 
 if __name__ == "__main__":
-    # download()
-    # preprocess()
-    # feature_extraction()
-    # split_dataset('../data/spectrograms/all', '../data/spectrograms')
-    train_loader, train_images, train_labels = dataset('train')
-    val_loader, val_images, val_labels = dataset('val')
-    test_loader, test_images, test_labels = dataset('test')
-    model = model()
+    download()
+    preprocess()
+    feature_extraction()
     split_dataset('../data/spectrograms', '../data/splited')
     train_loader, train_dataset = dataset('train')
     val_loader, _ = dataset('val')
