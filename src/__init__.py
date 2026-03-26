@@ -106,8 +106,9 @@ def dataset(split):
 
 def model(num_classes):
     obj = Model()
+    _model = obj.build_model(num_classes)
     logger.info("Model created")
-    return obj.build_model(num_classes)
+    return _model
 
 def train(model, train_loader, val_loader):
     obj = Train(model, train_loader, val_loader)
