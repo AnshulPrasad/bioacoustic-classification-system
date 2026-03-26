@@ -61,13 +61,13 @@ def preprocess():
 
 def feature_extraction():
     logger.info("Feature extraction")
-    for processed_audio_folder in sorted(Path('../data/processed').iterdir()):
+    for processed_audio_folder in sorted(Path(PROCESSED_DIR).iterdir()):
         for audio_path in Path(processed_audio_folder).glob('*.wav'):
             try:
                 audio, sr = librosa.load(audio_path, sr=22050)
                 obj = FeatureExtractor(audio, sr)
                 stretched, pitched, noisy = obj.augment_audio()
-                folder_path = Path(f"../data/spectrograms/{'_'.join(audio_path.stem.split('_')[:-2])}_png")
+                folder_path = Path(f"{SPECTROGRAM_DIR}/{'_'.join(audio_path.stem.split('_')[:-2])}_png")
                 folder_path.mkdir(parents=True, exist_ok=True)
                 for audio_version, version_name in zip([audio, stretched, pitched, noisy], ['_audio', '_stretched', '_pitched', '_noisy']):
                     mel_db = obj.generate_melspectrogram(audio_version)
