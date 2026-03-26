@@ -19,5 +19,10 @@ species_list:
     common_name: "Black Drongo"
   - scientific_name: "Orthotomus sutorius"
     common_name: "Common Tailorbird"
-  - scientific_name: "Sturnia pagodarum"
-    common_name: "Brahminy Starling"
+
+RAW_DIR: "../data/raw"
+PROCESSED_DIR: "../data/processed"
+SPECTROGRAM_DIR: "../data/spectrograms"
+SPLIT_DIR: '../data/splited'
+MODEL_PATH: "../models/checkpoints/best_model.pth"
+CONFUSION_MATRIX_PATH: '../outputs/confusion_matrix.png'
