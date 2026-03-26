@@ -25,7 +25,7 @@ PROCESSED_DIR = config['PROCESSED_DIR']
 def download():
     for sci_name, common_name in SPECIES_LIST:
         try:
-            obj = Species(sci_name)
+            obj = Species(sci_name, RAW_DIR)
             obj.download()
         except ValueError as e:
             logger.warning("Skipping %s: %s", common_name, e)
