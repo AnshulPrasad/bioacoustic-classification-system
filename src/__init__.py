@@ -19,6 +19,8 @@ config_path = Path("../configs/config.yaml")  # change path if needed
 with open(config_path, "r", encoding="utf-8") as f:
     config = yaml.safe_load(f)
 SPECIES_LIST = [(s['scientific_name'], s['common_name']) for s in config['species_list']]
+RAW_DIR = config['RAW_DIR']
+PROCESSED_DIR = config['PROCESSED_DIR']
 
 def download():
     for sci_name, common_name in SPECIES_LIST:
@@ -32,9 +34,9 @@ def download():
 
 def preprocess():
     logger.info("Preprocessing data")
-    for species_folder in sorted(Path('../data/raw').iterdir()):
-        if species_folder.is_dir(): # do not pick .csv files in the same folder
-            for audio_path in Path(species_folder).rglob('*.mp3'):
+    for species_folder in sorted(Path(RAW_DIR).iterdir()): # traverse all the files and folders in the directory "data"
+        if species_folder.is_dir(): # only use species directories
+            for audio_path in Path(species_folder).rglob('*.mp3'): # traverse all the audio files in the sub-folder.
                 try:
                     audio, sr = librosa.load(audio_path, sr=22050)
                     obj = Preprocessor(audio, sr)

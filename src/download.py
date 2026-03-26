@@ -2,18 +2,9 @@ import csv
 import requests
 import os
 import time
-import yaml
-from pathlib import Path
 from dotenv import load_dotenv
 from logger import get_logger
 logger = get_logger(__name__, 'download.log')
-
-# Configuration import
-config_path = Path("../configs/config.yaml")  # change path if needed
-with open(config_path, "r", encoding="utf-8") as f:
-    config = yaml.safe_load(f)
-RAW_DIR = config["RAW_DIR"]
-os.makedirs(RAW_DIR, exist_ok=True)
 
 # API key import
 load_dotenv()
@@ -26,8 +17,9 @@ class Species:
     Download a species recordings from xeno-canto website
     and save it in the output directory and corresponding csv file
     """
-    def __init__(self, species):
+    def __init__(self, species, RAW_DIR):
         self.species = species # species name can be found on xeno-canto website
+        self.RAW_DIR = RAW_DIR
         self.base_url= f'https://xeno-canto.org/api/3/recordings?query=sp:"{self.species}"&key={API_KEY}'
         with requests.get(self.base_url) as r:
             self.data = r.json()
@@ -102,24 +94,24 @@ class Species:
     def download_audio(self, metadata):
         try:
             file_name = f"{self.english_name}_{metadata['id']}.mp3"
-            if os.path.isfile(f"{RAW_DIR}/{self.english_name}_mp3/{file_name}"): # Skip already downloaded audio files
+            if os.path.isfile(f"{self.RAW_DIR}/{self.english_name}_mp3/{file_name}"): # Skip already downloaded audio files
                 logger.info("File %s already exists", file_name)
                 return
             response = requests.get(metadata['file'], stream=True, timeout=30)  # download
-            with open(f"{RAW_DIR}/{self.english_name}_mp3/{file_name}", 'wb') as f:  # save
+            with open(f"{self.RAW_DIR}/{self.english_name}_mp3/{file_name}", 'wb') as f:  # save
                 f.write(response.content)
                 logger.info('Downloaded: %s', file_name)
         except Exception as e:
             logger.warning("❌ Failed %s: %s", metadata['id'], e)
 
     def write_csv(self):
-        with open(f'{RAW_DIR}/{self.english_name}.csv', 'w', encoding='utf-8', newline='') as f: # Write information in .csv file
+        with open(f'{self.RAW_DIR}/{self.english_name}.csv', 'w', encoding='utf-8', newline='') as f: # Write information in .csv file
             writer = csv.DictWriter(f, fieldnames=self.rows[0].keys())
             writer.writeheader()
             writer.writerows(self.rows)
 
     def download(self):
-        os.makedirs(f"{RAW_DIR}/{self.english_name}_mp3", exist_ok=True) # sub-directory for each species to avoid clutter
+        os.makedirs(f"{self.RAW_DIR}/{self.english_name}_mp3", exist_ok=True) # sub-directory for each species to avoid clutter
         for page in range(1, self.pages + 1): # loop over every page
             recordings = self.page_recordings(page) # get all recording's metadata in the page
             for record in recordings: # loop over every recording instance
