@@ -22,6 +22,7 @@ SPECIES_LIST = [(s['scientific_name'], s['common_name']) for s in config['specie
 RAW_DIR = config['RAW_DIR']
 PROCESSED_DIR = config['PROCESSED_DIR']
 SPECTROGRAM_DIR = config["SPECTROGRAM_DIR"]
+SPLIT_DIR = config("SPLIT_DIR")
 
 def download():
     logger.info("Downloading data")
