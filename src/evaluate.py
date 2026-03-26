@@ -7,7 +7,6 @@
 import torch
 import matplotlib.pyplot as plt
 import seaborn as sns
-from pathlib import Path
 from sklearn.metrics import classification_report, confusion_matrix
 from logger import get_logger
 logger = get_logger(__name__, 'pipeline.log')
