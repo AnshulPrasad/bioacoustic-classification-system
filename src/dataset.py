@@ -32,6 +32,13 @@ class BirdSoundDataset(Dataset):
         df['id'] = df['id'].astype(str)
         df['type'] = df['type'].fillna('unknown').astype(str).str.lower()
         df['type'] = df['type'].apply(lambda x: x.split(',')[0].strip())
+        cleanup_map = {
+            "?": "unknown",
+            "uncertain": "unknown",
+            "call?": "call",
+            "song?": "song"
+        }
+        df['type'] = df['type'].replace(cleanup_map)
         le = LabelEncoder()
         df['label'] = le.fit_transform(df['type'])
         self.num_classes = df['label'].max() + 1
