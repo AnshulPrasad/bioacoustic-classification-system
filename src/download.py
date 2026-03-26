@@ -26,6 +26,10 @@ from logger import get_logger
 logger = get_logger(__name__, 'download.log')
 
 class Species:
+    """
+    Download a species recordings from xeno-canto website
+    and save it in the output directory and corresponding csv file
+    """
     def __init__(self, species):
         self.species = species
         self.base_url= f'https://xeno-canto.org/api/3/recordings?query=sp:"{self.species}"&key={API_KEY}'
@@ -37,10 +41,7 @@ class Species:
         self.english_name = '_'.join(self.data['recordings'][0]['en'].replace('-', ' ').split(' '))
         self.pages = self.data['numPages']
 
-    def make_directory(self):
-        os.makedirs(f"{OUTPUT_DIR}/{self.english_name}_mp3", exist_ok=True)
-
-    def page_recordings(self, page):
+    def page_recordings(self, page): # get metadata of all recordings in the page
         page_url = self.base_url + '&page=' + str(page)
         with requests.get(page_url) as r:
             page_data = r.json()
