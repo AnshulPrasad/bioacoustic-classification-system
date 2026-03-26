@@ -21,8 +21,6 @@ class Train:
         self.lr = lr
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr)
         self.criterion = nn.CrossEntropyLoss()
-        self.epochs = epochs
-        self.lr = lr
         self.best_val_acc = 0
 
     def train_one_epoch(self, epoch):
