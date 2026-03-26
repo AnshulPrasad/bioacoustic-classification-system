@@ -36,9 +36,7 @@ class Evaluator:
         cm = confusion_matrix(self.all_labels, self.all_preds)
         plt.figure(figsize=(12, 10))
         sns.heatmap(cm, annot=True, fmt='d', xticklabels=self.present_names, yticklabels=self.present_names)
-        Path('../outputs').mkdir(parents=True, exist_ok=True)
-        plt.savefig('../outputs/confusion_matrix.png')
-        logger.info('Prepared confusion matrix')
+        plt.savefig(f"{self.CONFUSION_MATRIX_PATH}")
 
     def evaluate(self):
         logger.info("Evaluating...")
