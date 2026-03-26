@@ -24,7 +24,7 @@ class Evaluator:
         self.all_labels = []
         obj = Model()
         self.model = obj.build_model(len(self.class_names)) # build a new model
-        state = torch.load('../models/checkpoints/best_model.pth')
+        state = torch.load(f'{MODEL_PATH}', map_location='cpu', weights_only=True)
         self.model.load_state_dict(state)
 
     def classify_report(self):
