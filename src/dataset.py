@@ -16,7 +16,7 @@ class BirdSoundDataset(Dataset):
     def __init__(self, SPLIT_DIR, RAW_DIR, split='train', transform=None):
         self.SPLIT_DIR = Path(SPLIT_DIR) / split
         self.RAW_DIR = RAW_DIR
-        self.files = sorted(self.root_dir.rglob('*.png'))
+        self.files = sorted(self.SPLIT_DIR.rglob('*.png'))
         self. labels = self.labels_int()
         self.transform = transform or transforms.Compose([
             transforms.Resize((224, 224)),
