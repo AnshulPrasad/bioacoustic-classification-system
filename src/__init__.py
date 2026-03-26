@@ -79,9 +79,7 @@ def feature_extraction():
                         continue
                     obj.save_spectrogram(mel_db, output_path)
                     logger.info("Saved: %s", output_path)
-
-                del obj
-                logger.info("Extracted %s", audio_path)
+                logger.info("Extracted: %s", audio_path)
             except Exception as e:
                 logger.error("Skipping %s: %s", audio_path, e)
 
