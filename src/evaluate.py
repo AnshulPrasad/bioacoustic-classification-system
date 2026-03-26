@@ -30,7 +30,6 @@ class Evaluator:
     def classify_report(self):
         logger.info('Preparing classification report...')
         logger.info(classification_report(self.all_labels, self.all_preds, target_names=self.present_names))
-        logger.info('Prepared classification report')
 
     def confusion_matrix(self):
         logger.info('Preparing confusion matrix...')
