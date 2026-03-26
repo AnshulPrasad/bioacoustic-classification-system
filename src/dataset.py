@@ -13,7 +13,7 @@ from logger import get_logger
 logger = get_logger(__name__, 'dataset.log')
 
 class BirdSoundDataset(Dataset):
-    def __init__(self, root_dir, split='train', transform=None):
+    def __init__(self, root_dir, RAW_DIR, split='train', transform=None):
         self.root_dir = Path(root_dir) / split
         self.files = sorted(self.root_dir.rglob('*.png'))
         self. labels = self.labels_int()
