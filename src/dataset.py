@@ -44,6 +44,9 @@ class BirdSoundDataset(Dataset):
         logger.info(f'Loading labels({self.split})')
         ids = [file.stem.split('_')[-3] for file in self.files]  # extract all IDs at once
         labels = self.load_all_metadata().reindex(ids, fill_value=-1).tolist()
+        n_missing = labels.count(-1)
+        if n_missing > 0:
+            logger.warning("%d files have unmatched IDs — will crash during training!", n_missing)
         return labels
 
     def __len__(self):
