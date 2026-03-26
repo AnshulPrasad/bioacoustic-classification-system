@@ -130,7 +130,7 @@ if __name__ == "__main__":
     download()
     preprocess()
     feature_extraction()
-    split_dataset('../data/spectrograms', '../data/splited')
+    split_dataset(SPECTROGRAM_DIR, SPLIT_DIR)
     train_loader, train_dataset = dataset('train')
     val_loader, _ = dataset('val')
     test_loader, _ = dataset('test')
