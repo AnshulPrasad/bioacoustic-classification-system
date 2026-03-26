@@ -16,6 +16,9 @@ class Train:
         self.model = model.to(self.device)
         self.train_loader = train_loader
         self.val_loader = val_loader
+        self.MODEL_PATH = MODEL_PATH
+        self.epochs = epochs
+        self.lr = lr
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr)
         self.criterion = nn.CrossEntropyLoss()
         self.epochs = epochs
