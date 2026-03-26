@@ -15,7 +15,7 @@ logger = get_logger(__name__, 'pipeline.log')
 from model import Model
 
 class Evaluator:
-    def __init__(self, test_loader, num_classes):
+    def __init__(self, test_loader, num_classes, MODEL_PATH, CONFUSION_MATRIX_PATH):
         self.test_loader = test_loader
         self.class_names = list(range(num_classes))
         self.all_preds = []
