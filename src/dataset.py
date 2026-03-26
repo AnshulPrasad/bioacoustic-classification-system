@@ -29,6 +29,8 @@ class BirdSoundDataset(Dataset):
         logger.info(f'Loading all metadata({self.split})')
         df = pd.concat([pd.read_csv(f, usecols=['id', 'type']) for f in sorted(Path(self.RAW_DIR).glob("*.csv"))],ignore_index=True)
         df['id'] = df['id'].astype(str)
+        df['type'] = df['type'].fillna('unknown').astype(str).str.lower()
+        df['type'] = df['type'].apply(lambda x: x.split(',')[0].strip())
         le = LabelEncoder()
         df['label'] = le.fit_transform(df['type'])
         self.num_classes = df['label'].max() + 1
