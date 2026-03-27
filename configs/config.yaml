@@ -1,14 +1,6 @@
 species_list:
-  - scientific_name: "Eudynamys scolopaceus"
-    common_name: "Asian Koel"
   - scientific_name: "Pycnonotus cafer"
     common_name: "Red-vented Bulbul"
-  - scientific_name: "Acridotheres tristis"
-    common_name: "Common Myna"
-  - scientific_name: "Pavo cristatus"
-    common_name: "Indian Peafowl"
-  - scientific_name: "Halcyon smyrnensis"
-    common_name: "White-throated Kingfisher"
   - scientific_name: "Pycnonotus jocosus"
     common_name: "Red-whiskered Bulbul"
   - scientific_name: "Athene brama"
@@ -17,8 +9,6 @@ species_list:
     common_name: "House Crow"
   - scientific_name: "Dicrurus macrocercus"
     common_name: "Black Drongo"
-  - scientific_name: "Orthotomus sutorius"
-    common_name: "Common Tailorbird"
 
 RAW_DIR: "../data/raw"
 PROCESSED_DIR: "../data/processed"
