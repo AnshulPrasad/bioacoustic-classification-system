@@ -10,7 +10,7 @@ from logger import get_logger
 logger = get_logger(__name__, 'train.log')
 
 class Train:
-    def __init__(self, model, train_loader, val_loader, MODEL_PATH, epochs=50, lr=0.001):
+    def __init__(self, model, train_loader, val_loader, MODEL_PATH, epochs=50, lr=1e-4):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model = model.to(self.device)
         self.train_loader = train_loader
