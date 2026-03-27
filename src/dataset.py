@@ -146,14 +146,29 @@ class BirdSoundDataset():
         list_labels = ids_labels.reindex(ids, fill_value=-1).tolist()
         return list_labels
 
-    def labels_int(self):
-        logger.info(f'Loading labels({self.split})')
-        ids = [file.stem.split('_')[-3] for file in self.files]  # extract all IDs at once
-        labels = self.load_all_metadata().reindex(ids, fill_value=-1).tolist()
-        n_missing = labels.count(-1)
-        if n_missing > 0:
-            logger.warning("%d files have unmatched IDs — will crash during training!", n_missing)
-        return labels
+class BirdSplitDataset(Dataset):
+    def __init__(self, index_path, split="train", transform=None):
+        with open(index_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        if split == "train":
+            self.paths = data["train_paths"]
+            self.labels = data["train_labels"]
+        elif split == "val":
+            self.paths = data["val_paths"]
+            self.labels = data["val_labels"]
+        elif split == "test":
+            self.paths = data["test_paths"]
+            self.labels = data["test_labels"]
+        else:
+            raise ValueError("split must be train/val/test")
+
+        self.num_classes = data["num_classes"]
+        self.transform = transform or transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.5], std=[0.5]),
+        ])
 
     def __len__(self):
         return len(self.files)
