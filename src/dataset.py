@@ -124,13 +124,27 @@ class BirdSoundDataset():
         #             len(train_paths), len(val_paths), len.test_paths))
         return _paths
 
+    def encode(self, paths):
+        df, unique_ids = self.id_label()
+
+        # encode labels
         le = LabelEncoder()
         df['label'] = le.fit_transform(df['type'])
-        self.num_classes = df['label'].max() + 1
-        mapping_dict = {int(index): label for index, label in enumerate(le.classes_)}
+
+        self.num_classes = len(set(df['label']))
+
+        # Save the mapping for Django
+        mapping_dict = {int(index): str(label) for index, label in enumerate(le.classes_)}
         with open('../models/class_mapping.json', 'w') as f:
             json.dump(mapping_dict, f)
-        return df.set_index('id')['label']  # id → int label
+
+        ids_labels = df.set_index('id')['label']  # id → int label
+        ids=[]
+        for path in paths:
+            id = path.stem.split('_')[-3]
+            ids.append(id)
+        list_labels = ids_labels.reindex(ids, fill_value=-1).tolist()
+        return list_labels
 
     def labels_int(self):
         logger.info(f'Loading labels({self.split})')
