@@ -115,13 +115,6 @@ def evaluate(test_loader, num_classes):
     obj._confusion_matrix()
     obj.classify_report()
 
-def predict():
-    obj = Predictor()
-    obj.to_tensor()
-    obj.load()
-    obj.evaluate()
-    obj.predict()
-
 
 if __name__ == "__main__":
     # download()
