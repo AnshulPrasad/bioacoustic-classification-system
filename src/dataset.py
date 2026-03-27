@@ -17,14 +17,30 @@ class BirdSoundDataset(Dataset):
     def __init__(self, SPLIT_DIR, RAW_DIR, split='train', transform=None):
         self.SPLIT_DIR = Path(SPLIT_DIR) / split
         self.RAW_DIR = RAW_DIR
-        self.split = split
-        self.files = sorted(self.SPLIT_DIR.rglob('*.png'))
-        self. labels = self.labels_int()
+        self.SPECTROGRAM_DIR = SPECTROGRAM_DIR
+        self.files = list(Path(self.SPECTROGRAM_DIR).rglob("*.png"))
+        self.train_paths, self.val_paths, self.test_paths = self.split_dataset()
+        self.train_labels = self.encode(self.train_paths)
+        self.val_labels = self.encode(self.val_paths)
+        self.test_labels = self.encode(self.test_paths)
         self.transform = transform or transforms.Compose([
             transforms.Resize((224, 224)),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.5], std=[0.5])
         ])
+
+    def build_and_save_index(self, index_path):
+        data = {
+            "train_paths": [str(p) for p in self.train_paths],
+            "val_paths": [str(p) for p in self.val_paths],
+            "test_paths": [str(p) for p in self.test_paths],
+            "train_labels": self.train_labels,
+            "val_labels": self.val_labels,
+            "test_labels": self.test_labels,
+            "num_classes": int(self.num_classes),
+        }
+        with open(index_path, "w", encoding="utf-8") as f:
+            json.dump(data, f)
 
     def id_label(self):
         # build recording_id → label mapping from CSVs
