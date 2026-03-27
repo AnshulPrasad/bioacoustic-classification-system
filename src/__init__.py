@@ -88,8 +88,16 @@ def feature_extraction():
                 logger.error("Skipping %s: %s", audio_path, e)
 
 def dataset(split):
-    obj = BirdSoundDataset(f'{SPLIT_DIR}', RAW_DIR, split=split)
-    loader = DataLoader(obj, batch_size=32, shuffle=(split == 'train'), num_workers=4)
+    obj = BirdSplitDataset("../models/split_index.json", split=split)
+    if split == 'train':
+        from collections import Counter
+        from torch.utils.data import WeightedRandomSampler
+        counts = Counter(obj.labels)
+        weights = [1.0 / counts[l] for l in obj.labels]
+        sampler = WeightedRandomSampler(weights, len(weights), replacement=True)
+        loader = DataLoader(obj, batch_size=32, sampler=sampler, num_workers=4)
+    else:
+        loader = DataLoader(obj, batch_size=32, shuffle=False, num_workers=4)
     return loader, obj
 
 def model(num_classes):
