@@ -26,11 +26,6 @@ class BirdSoundDataset():
         self.train_labels = self.encode(self.train_paths)
         self.val_labels = self.encode(self.val_paths)
         self.test_labels = self.encode(self.test_paths)
-        self.transform = transform or transforms.Compose([
-            transforms.Resize((224, 224)),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-        ])
 
     def build_and_save_index(self, index_path):
         data = {
