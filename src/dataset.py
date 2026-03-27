@@ -50,6 +50,8 @@ class BirdSoundDataset():
         dfs = [pd.read_csv(f, usecols=['id', 'type']) for f in sorted(Path(self.RAW_DIR).glob("*.csv"))]
         df = pd.concat(dfs,ignore_index=True)
         df['id'] = df['id'].astype(str)
+
+        # clean labels
         df['type'] = df['type'].fillna('unknown').astype(str).str.lower()
         df['type'] = df['type'].apply(lambda x: x.split(',')[0].strip())
         cleanup_map = {
