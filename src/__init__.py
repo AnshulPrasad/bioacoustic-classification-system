@@ -1,8 +1,6 @@
 import librosa
 import yaml
-import shutil
 from pathlib import Path
-from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 from download import Species
 from preprocess import Preprocessor
@@ -125,10 +123,9 @@ def predict():
 
 
 if __name__ == "__main__":
-    download()
-    preprocess()
-    feature_extraction()
-    split_dataset(SPECTROGRAM_DIR, SPLIT_DIR)
+    # download()
+    # preprocess()
+    # feature_extraction()
     builder = BirdSoundDataset(SPLIT_DIR, RAW_DIR, SPECTROGRAM_DIR)
     builder.build_and_save_index("../models/split_index.json")
     train_loader, train_dataset = dataset('train')
