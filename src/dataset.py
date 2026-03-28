@@ -23,7 +23,7 @@ class BirdSoundDataset:
         self.SPECTROGRAM_DIR = spectrogram_dir
         self.CLASS_MAPPING_JSON = class_mapping_json
 
-        self.df = self.id_label()
+        self.df = self.data_frame()
         self.valid_ids = set(self.df['id'].tolist())
         self.grouped_files_list = self.grouped_files()
 
@@ -53,7 +53,7 @@ class BirdSoundDataset:
         with open(index_path, "w", encoding="utf-8") as f:
             json.dump(data, f)
 
-    def id_label(self):
+    def data_frame(self):
         # concatenate all csvs and convert ids from int to str
         dfs = [pd.read_csv(f, usecols=['id', 'type']) for f in sorted(Path(self.RAW_DIR).glob("*.csv"))]
         df = pd.concat(dfs,ignore_index=True)
