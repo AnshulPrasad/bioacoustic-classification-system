@@ -1,6 +1,6 @@
 import librosa
-import yaml
-from pathlib import Path
+from collections import Counter
+from torch.utils.data import WeightedRandomSampler
 from torch.utils.data import DataLoader
 from download import Species
 from preprocess import Preprocessor
@@ -11,7 +11,14 @@ from train import Train
 from evaluate import Evaluator
 from predict import Predictor
 from logger import get_logger
-from config.config import RAW_DIR, PROCESSED_DIR, SPECTROGRAM_DIR, MODEL_PATH, CONFUSION_MATRIX_PATH, SPECIES_LIST
+from config.config import (RAW_DIR,
+                           PROCESSED_DIR,
+                           SPECTROGRAM_DIR,
+                           MODEL_PATH,
+                           CONFUSION_MATRIX_PATH,
+                           SPECIES_LIST,
+                           SPLIT_JSON_PATH,
+                           )
 logger = get_logger(__name__, '__init__.log')
 
 def download():
@@ -90,16 +97,17 @@ def feature_extraction():
                     logger.info("Saved: %s", output_path)
 
 def dataset(split):
-    obj = BirdSplitDataset("../models/split_index.json", split=split)
+    obj = BirdSplitDataset(SPLIT_JSON_PATH, split=split)
+
+    # training set must be balanced for avoiding overfitting
     if split == 'train':
-        from collections import Counter
-        from torch.utils.data import WeightedRandomSampler
         counts = Counter(obj.labels)
         weights = [1.0 / counts[l] for l in obj.labels]
-        sampler = WeightedRandomSampler(weights, len(weights), replacement=True)
+        sampler = WeightedRandomSampler(weights, len(weights), replacement=True) # rebalancing how often each example is drawn
         loader = DataLoader(obj, batch_size=32, sampler=sampler, num_workers=4)
     else:
         loader = DataLoader(obj, batch_size=32, shuffle=False, num_workers=4)
+
     return loader, obj
 
 def model(num_classes):
