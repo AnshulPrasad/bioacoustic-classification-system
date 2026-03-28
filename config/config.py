@@ -21,5 +21,5 @@ CLASS_MAPPING_JSON =    PROJECT_ROOT / "models"  / "class_mapping.json"
 LOG_DIR =               PROJECT_ROOT / "logs"
 
 for p in [RAW_DIR, PROCESSED_DIR, SPECTROGRAM_DIR, SPLIT_DIR, MODEL_PATH,\
-          CONFUSION_MATRIX_PATH.parent, SPLIT_JSON_PATH.parent, CLASS_MAPPING_JSON.parent, LOG_DIR.parent]:
+          CONFUSION_MATRIX_PATH.parent, SPLIT_JSON_PATH.parent, CLASS_MAPPING_JSON.parent, LOG_DIR]:
     p.mkdir(parents=True, exist_ok=True)
