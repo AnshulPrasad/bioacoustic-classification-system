@@ -63,9 +63,8 @@ class BirdSoundDataset():
         df['type'] = df['type'].replace(cleanup_map)
 
         # drop rare classes before splitting
-        KEEP = {'call', 'song', 'alarm call', 'flight call'}
-        df = df[df['type'].isin(KEEP)]
-        valid_ids = set(df['id'].tolist())
+        keep = {"call", "song", "alarm call", "flight call"}
+        df = df[df["type"].isin(keep)]
 
         return df, valid_ids
 
