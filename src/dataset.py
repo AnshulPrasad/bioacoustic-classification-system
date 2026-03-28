@@ -16,8 +16,8 @@ from sklearn.model_selection import train_test_split
 from logger import get_logger
 logger = get_logger(__name__, 'dataset.log')
 
-class BirdSoundDataset():
-    def __init__(self, split_dir: Path, raw_dir: Path, spectrogram_dir: Path):
+class BirdSoundDataset:
+    def __init__(self, split_dir: Path, raw_dir: Path, spectrogram_dir: Path, class_mapping_json: Path):
         self.SPLIT_DIR = split_dir
         self.RAW_DIR = raw_dir
         self.SPECTROGRAM_DIR = spectrogram_dir
