@@ -21,30 +21,41 @@ def download():
         obj.download()
 
 def preprocess():
-    logger.info("Preprocessing data")
-    for species_folder in sorted(Path(RAW_DIR).iterdir()): # traverse all the files and folders in the directory "data"
-        if species_folder.is_dir(): # only use species directories
-            for audio_path in Path(species_folder).rglob('*.mp3'): # traverse all the audio files in the sub-folder.
-                try:
-                    audio, sr = librosa.load(audio_path, sr=22050)
-                    obj = Preprocessor(audio, sr)
-                    resampled = obj.resample_audio(sr)
-                    mono = obj.to_mono(resampled)
-                    trimmed = obj.trim_silence(mono)
-                    chunks = obj.chunk_audio(trimmed, sr, 5)
-                    folder_path = Path(f"{PROCESSED_DIR}/{'_'.join(species_folder.stem.split('_')[:-1])}_wav")
-                    folder_path.mkdir(parents=True, exist_ok=True)
-                    for i, chunk in enumerate(chunks): # save all the chunks of the audio file in the folder PROCESSED_DIR
-                        file_path =  Path(f"{audio_path.stem}_chunk{i}").with_suffix(".wav")
-                        output_path = folder_path / file_path
-                        if output_path.exists():
-                            logger.info("Already exist: %s", output_path)
-                            continue
+    logger.info("Preprocessing data...")
+
+    # loop over files (.csv) + folders (species) in the directory data/raw
+    for raw_folder in RAW_DIR.iterdir():
+
+        # pick only folders
+        if raw_folder.is_dir():
+
+            # make folder for storing processed files inside PROCESSED_DIR
+            species_folder_path = f"{'_'.join(raw_folder.stem.split('_')[:-1])}_wav"
+            folder_path = PROCESSED_DIR / species_folder_path
+            folder_path.mkdir(parents=True, exist_ok=True)
+
+            # loop over the audio(.mp3) files
+            for audio_path in raw_folder.rglob('*.mp3'):
+
+                # preprocess an audio file
+                audio, sr = librosa.load(audio_path, sr=22050)
+                obj = Preprocessor(audio, sr)
+                resampled = obj.resample_audio(sr)
+                mono = obj.to_mono(resampled)
+                trimmed = obj.trim_silence(mono)
+                chunks = obj.chunk_audio(trimmed, sr, 5)
+
+
+                # save the chunks of the audio file in the folder (if not saved)
+                for i, chunk in enumerate(chunks):
+                    file_path =  f"{audio_path.stem}_chunk{i}".with_suffix(".wav")
+                    output_path = folder_path / file_path
+                    if output_path.exists():
+                        logger.info("Already exist: %s", output_path)
+                        continue
+                    else:
                         obj.save_audio(chunk, output_path, sr=22050)
                         logger.info("Saved chunk: %s", output_path)
-                    logger.info("Preprocessed: %s", audio_path)
-                except Exception as e:
-                    logger.error("Skipping %s: %s", audio_path, e)
 
 def feature_extraction():
     logger.info("Feature extraction")
