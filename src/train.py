@@ -16,12 +16,14 @@ logger = get_logger(__name__, 'train.log')
 class Train:
     def __init__(self, model: Model, train_loader:DataLoader, val_loader:DataLoader, model_path: Path, epochs: int=50, lr: float=1e-4):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
         self.model = model.to(self.device)
         self.train_loader = train_loader
         self.val_loader = val_loader
         self.MODEL_PATH = MODEL_PATH
         self.epochs = epochs
         self.lr = lr
+
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr, weight_decay=1e-4)
         self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             self.optimizer, mode='max', factor=0.5, patience=2, verbose=True
