@@ -97,7 +97,7 @@ def feature_extraction():
                     obj.save_spectrogram(mel_db, output_path)
                     logger.info("Saved: %s", output_path)
 
-def dataset(split):
+def dataset(split: str):
     obj = BirdSplitDataset(SPLIT_JSON_PATH, split=split)
 
     # training set must be balanced for avoiding overfitting
@@ -111,17 +111,17 @@ def dataset(split):
 
     return loader, obj
 
-def model(num_classes):
+def model(num_classes: int):
     obj = Model()
     _model = obj.build_model(num_classes)
     logger.info("Model created")
     return _model
 
-def train(model, train_loader, val_loader):
+def train(model: Model, train_loader: DataLoader, val_loader: DataLoader):
     obj = Train(model, train_loader, val_loader, MODEL_PATH)
     obj.train()
 
-def evaluate(test_loader, num_classes):
+def evaluate(test_loader: DataLoader, num_classes: int):
     obj = Evaluator(test_loader, num_classes, MODEL_PATH, CONFUSION_MATRIX_PATH)
     obj.evaluate()
     obj._confusion_matrix()
