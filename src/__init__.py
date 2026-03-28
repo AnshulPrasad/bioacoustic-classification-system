@@ -14,6 +14,7 @@ from logger import get_logger
 from config.config import (RAW_DIR,
                            PROCESSED_DIR,
                            SPECTROGRAM_DIR,
+                           SPLIT_DIR,
                            MODEL_PATH,
                            CONFUSION_MATRIX_PATH,
                            SPECIES_LIST,
