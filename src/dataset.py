@@ -119,8 +119,8 @@ class BirdSoundDataset():
                     shutil.copy(f, file_path)
             _paths.append(paths)
 
-        # logger.info("Split complete — train:%d val:%d test:%d recording IDs",
-        #             len(train_paths), len(val_paths), len.test_paths))
+        logger.info("Split complete — train:%d val:%d test:%d recording IDs",
+                    len(_paths[0]), len(_paths[1]), len(_paths[2]))
         return _paths
 
     def encode(self, paths):
