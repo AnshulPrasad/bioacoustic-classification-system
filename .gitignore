@@ -7,3 +7,4 @@ outputs
 pyproject.toml
 uv.lock
 .env
+*.sqlite3
