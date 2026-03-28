@@ -29,8 +29,8 @@ class BirdSoundDataset:
         self.ids, self.labels = self.ids_and_types()
 
         # encode labels
-        self.le = LabelEncoder()
-        self.df['label'] = self.le.fit_transform(self.df['type'])
+        le = LabelEncoder()
+        self.df['label'] = le.fit_transform(self.df['type'])
         self.num_classes = len(set(self.df['label']))
 
         self.CLASS_MAPPING_JSON = class_mapping_json
