@@ -17,15 +17,19 @@ class Evaluator:
     def __init__(self, test_loader: DataLoader, num_classes: int, model_path: Path, confusion_matrix_path: Path):
         self.test_loader = test_loader
         self.class_names = list(range(num_classes))
-        self.MODEL_PATH = MODEL_PATH
-        self.CONFUSION_MATRIX_PATH = CONFUSION_MATRIX_PATH
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.MODEL_PATH = model_path
+        self.CONFUSION_MATRIX_PATH = confusion_matrix_path
+
         self.all_preds = []
         self.all_labels = []
+
         obj = Model()
         self.model = obj.build_model(len(self.class_names)) # build a new model
-        state = torch.load(f'{MODEL_PATH}', map_location='cpu', weights_only=True)
+
+        state = torch.load(self.MODEL_PATH, map_location='cpu', weights_only=True)
         self.model.load_state_dict(state)
+
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model = self.model.to(self.device)
 
     def classify_report(self):
@@ -37,17 +41,20 @@ class Evaluator:
         cm = confusion_matrix(self.all_labels, self.all_preds)
         plt.figure(figsize=(12, 10))
         sns.heatmap(cm, annot=True, fmt='d', xticklabels=self.present_names, yticklabels=self.present_names)
-        plt.savefig(f"{self.CONFUSION_MATRIX_PATH}")
+        plt.savefig(self.CONFUSION_MATRIX_PATH)
 
     def evaluate(self):
         logger.info("Evaluating...")
         self.model.eval()
+
         with torch.no_grad():
             for images, labels in self.test_loader:
                 images = images.to(self.device)
                 preds = self.model(images).argmax(dim=1)
+
                 self.all_preds.extend(preds.cpu().numpy())
                 self.all_labels.extend(labels.numpy())
+
         # Only use labels that appear in predictions/actuals
         present_labels = sorted(set(self.all_labels) | set(self.all_preds))
         self.present_names = [str(i) for i in present_labels]
