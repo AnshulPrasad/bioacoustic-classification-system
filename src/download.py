@@ -100,7 +100,7 @@ class Species:
 
     def download(self):
         # create folder for the species which store all the downloaded .mp3 files
-        folder_path = self.RAW_DIR / self.english_name / "_mp3"
+        folder_path = self.RAW_DIR / f"{self.english_name}_mp3"
         os.makedirs(folder_path, exist_ok=True)
 
         records_list = []
