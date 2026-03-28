@@ -29,7 +29,7 @@ class Species:
         return recordings
 
     @staticmethod # still called as obj.record_metadata(...) but no self
-    def record_metadata(record):
+    def record_metadata(record: dict):
         return {
             # Identification
             'id': record.get('id', None),
