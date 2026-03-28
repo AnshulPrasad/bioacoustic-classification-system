@@ -133,7 +133,7 @@ if __name__ == "__main__":
     preprocess()
     feature_extraction()
     builder = BirdSoundDataset(SPLIT_DIR, RAW_DIR, SPECTROGRAM_DIR)
-    builder.build_and_save_index("../models/split_index.json")
+    builder.build_and_save_index(SPLIT_JSON_PATH)
     train_loader, train_dataset = dataset('train')
     val_loader, _ = dataset('val')
     test_loader, _ = dataset('test')
