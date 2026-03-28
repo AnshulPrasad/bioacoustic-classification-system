@@ -113,7 +113,7 @@ class BirdSoundDataset():
             # iterate over the ids that belong to this split
             paths=[]
             for rec_id in ids:
-                for f in grouped_files[rec_id]:
+                for f in self.grouped_files_list[rec_id]:
                     file_path = output_path / f.name
                     paths.append(file_path)
                     shutil.copy(f, file_path)
