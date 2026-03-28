@@ -1,5 +1,6 @@
 import logging
 import os
+from config.config import LOG_DIR
 
 class FlushFileHandler(logging.FileHandler):
     def emit(self, record):
@@ -7,8 +8,7 @@ class FlushFileHandler(logging.FileHandler):
         self.flush()
 
 def get_logger(name: str, log_file: str) -> logging.Logger:
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    LOG_PATH  = os.path.join(BASE_DIR, f'../logs/{log_file}')
+    LOG_PATH = LOG_DIR / log_file
     os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
 
     logger = logging.getLogger(name)
