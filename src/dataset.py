@@ -23,6 +23,8 @@ class BirdSoundDataset:
         self.SPECTROGRAM_DIR = spectrogram_dir
         self.CLASS_MAPPING_JSON = class_mapping_json
 
+        self.files = list(Path(self.SPECTROGRAM_DIR).rglob("*.png"))
+
         self.df = self.data_frame()
         self.valid_ids = set(self.df['id'].tolist())
         self.grouped_files_list = self.grouped_files()
@@ -33,14 +35,13 @@ class BirdSoundDataset:
         self.df['label'] = le.fit_transform(self.df['type'])
         self.num_classes = len(set(self.df['label']))
 
-
         # Save the mapping for Django
         mapping_dict = {int(index): str(label) for index, label in enumerate(le.classes_)}
         with open(self.CLASS_MAPPING_JSON, 'w') as f:
             json.dump(mapping_dict, f)
 
-        self.files = list(Path(self.SPECTROGRAM_DIR).rglob("*.png"))
         self.train_paths, self.val_paths, self.test_paths = self.split_dataset()
+
         self.train_labels = self.encode(self.train_paths)
         self.val_labels = self.encode(self.val_paths)
         self.test_labels = self.encode(self.test_paths)
