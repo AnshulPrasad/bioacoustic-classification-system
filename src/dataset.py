@@ -92,6 +92,7 @@ class BirdSoundDataset():
             random_state=42,
             stratify=labels_for_unique_ids
         )
+
         val_ratio = splits[1] / (splits[1] + splits[2])
         val_ids, test_ids, _, _ = train_test_split(
             temp_ids, temp_labels,
