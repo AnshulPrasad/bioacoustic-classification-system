@@ -11,13 +11,6 @@ from logger import get_logger
 from pathlib import Path
 logger = get_logger(__name__, 'features.log')
 
-# Responsibilities:
-# - Generate mel spectrograms from processed WAVs
-# - Apply augmentation (noise, pitch shift, time stretch)
-# - Save spectrograms as PNGs to data/spectrograms/
-# - Split into train/val/test
-
-class FeatureExtractor ():
 
     def __init__(self, audio, original_sr):
         self.audio = audio
