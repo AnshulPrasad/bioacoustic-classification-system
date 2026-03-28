@@ -97,13 +97,11 @@ class BirdSoundDataset:
         return unique_ids, labels_for_unique_ids
 
     def split_dataset(self, splits=(0.7, 0.15, 0.15)):
-        ids, labels = self.ids_and_labels()
-
         train_ids, temp_ids, _, temp_labels = train_test_split(
-            ids, labels,
+            self.ids, self.labels,
             test_size=1 - splits[0],
             random_state=42,
-            stratify=labels
+            stratify=self.labels
         )
 
         val_ratio = splits[1] / (splits[1] + splits[2])
