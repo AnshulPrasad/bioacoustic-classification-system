@@ -46,12 +46,8 @@ def preprocess():
             for audio_path in raw_folder.rglob('*.mp3'):
 
                 # preprocess an audio file
-                audio, sr = librosa.load(audio_path, sr=22050)
-                obj = Preprocessor(audio, sr)
-                resampled = obj.resample_audio(sr)
-                mono = obj.to_mono(resampled)
-                trimmed = obj.trim_silence(mono)
-                chunks = obj.chunk_audio(trimmed, sr, 5)
+                obj = Preprocessor(audio_path)
+                chunks = obj.preprocess_audio()
 
 
                 # save the chunks of the audio file in the folder (if not saved)
