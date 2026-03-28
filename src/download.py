@@ -99,14 +99,27 @@ class Species:
             writer.writerows(records)
 
     def download(self):
-        os.makedirs(f"{self.RAW_DIR}/{self.english_name}_mp3", exist_ok=True) # sub-directory for each species to avoid clutter
-        for page in range(1, self.pages + 1): # loop over every page
-            recordings = self.page_recordings(page) # get all recording's metadata in the page
-            for record in recordings: # loop over every recording instance
-                metadata = self.record_metadata(record) # get all metadata of a record and append to list rows which will be used to create .csv file
-                self.rows.append(metadata)
-                self.download_audio(metadata) # download and save .mp3 audio file
-                time.sleep(0.5)
-            time.sleep(1)
-        logger.info("Downloaded %d recordings for %s", len(self.rows), self.english_name)
-        self.write_csv()
+        # create folder for the species which store all the downloaded .mp3 files
+        folder_path = self.RAW_DIR / self.english_name / "_mp3"
+        os.makedirs(folder_path, exist_ok=True)
+
+        records_list = []
+        # loop over every page
+        for page in range(1, self.data["numPages"] + 1):
+
+            # get metadata of all the recordings on the page
+            records = self.page_records(page)
+
+            # loop over every record
+            for record in records:
+                # get all metadata of a record and append to list rows which will be used to create .csv file
+                metadata = self.record_metadata(record)
+                records_list.append(metadata)
+
+                # download and save .mp3 audio file
+                self.download_audio(metadata)
+
+        logger.info("Downloaded %d recordings for %s", len(records_list), self.english_name)
+
+        # write records to a .csv file
+        self.write_csv(records_list)
