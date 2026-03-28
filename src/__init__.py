@@ -52,7 +52,7 @@ def preprocess():
 
                 # save the chunks of the audio file in the folder (if not saved)
                 for i, chunk in enumerate(chunks):
-                    file_name =  f"{audio_path.stem}_chunk{i}".with_suffix(".wav")
+                    file_name =  Path(f"{audio_path.stem}_chunk{i}").with_suffix(".wav")
                     output_path = folder_path / file_name
                     if output_path.exists():
                         logger.info("Already exist: %s", output_path)
@@ -83,7 +83,7 @@ def feature_extraction():
                 mel_db = obj.generate_melspectrogram(audio_version)
 
                 # save
-                file_name = f"{audio_path.stem}_{version_name}".with_suffix('.png')
+                file_name = Path(f"{audio_path.stem}_{version_name}").with_suffix('.png')
                 output_path = folder_path / file_name
                 if output_path.exists():
                     logger.info("Already exist: %s", output_path)
