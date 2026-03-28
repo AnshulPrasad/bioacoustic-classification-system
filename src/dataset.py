@@ -145,8 +145,8 @@ class BirdSoundDataset:
         return labels
 
 class BirdSplitDataset(Dataset):
-    def __init__(self, index_path, split="train", transform=None):
-        with open(index_path, "r", encoding="utf-8") as f:
+    def __init__(self, split_json_path: Path, split: str="train", transform=None):
+        with open(split_json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         if split == "train":
