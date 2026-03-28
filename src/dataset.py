@@ -73,7 +73,7 @@ class BirdSoundDataset():
         grouped_files = defaultdict(list)
         for f in self.files:
             rec_id = f.stem.split('_')[-3]
-            if rec_id in valid_ids:
+            if rec_id in self.valid_ids:
                 grouped_files[rec_id].append(f)
         return grouped_files
 
