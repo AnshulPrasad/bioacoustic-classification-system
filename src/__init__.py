@@ -19,7 +19,7 @@ from config.config import (RAW_DIR,
                            CONFUSION_MATRIX_PATH,
                            SPECIES_LIST,
                            SPLIT_JSON_PATH,
-                           )
+                           CLASS_MAPPING_JSON)
 logger = get_logger(__name__, '__init__.log')
 
 def download():
@@ -127,7 +127,7 @@ if __name__ == "__main__":
     download()
     preprocess()
     feature_extraction()
-    builder = BirdSoundDataset(SPLIT_DIR, RAW_DIR, SPECTROGRAM_DIR)
+    builder = BirdSoundDataset(SPLIT_DIR, RAW_DIR, SPECTROGRAM_DIR, CLASS_MAPPING_JSON)
     builder.build_and_save_index(SPLIT_JSON_PATH)
     train_loader, train_dataset = dataset('train')
     val_loader, _ = dataset('val')
