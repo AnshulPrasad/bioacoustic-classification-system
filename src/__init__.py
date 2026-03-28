@@ -58,27 +58,36 @@ def preprocess():
                         logger.info("Saved chunk: %s", output_path)
 
 def feature_extraction():
-    logger.info("Feature extraction")
-    for processed_audio_folder in sorted(Path(PROCESSED_DIR).iterdir()):
-        for audio_path in Path(processed_audio_folder).glob('*.wav'):
-            try:
-                audio, sr = librosa.load(audio_path, sr=22050)
-                obj = FeatureExtractor(audio, sr)
-                stretched, pitched, noisy = obj.augment_audio()
-                folder_path = Path(f"{SPECTROGRAM_DIR}/{'_'.join(audio_path.stem.split('_')[:-2])}_png")
-                folder_path.mkdir(parents=True, exist_ok=True)
-                for audio_version, version_name in zip([audio, stretched, pitched, noisy], ['audio', 'stretched', 'pitched', 'noisy']):
-                    mel_db = obj.generate_melspectrogram(audio_version)
-                    file_path = Path(f"{audio_path.stem}_{version_name}").with_suffix('.png')
-                    output_path = folder_path / file_path
-                    if output_path.exists():
-                        logger.info("Already exist: %s", output_path)
-                        continue
+    logger.info("Feature extraction...")
+
+    for processed_folder in PROCESSED_DIR.iterdir():
+
+        # make folder for storing created spectrograms inside SPECTROGRAM_DIR
+        folder_path = SPECTROGRAM_DIR / f"{'_'.join(processed_folder.stem.split('_')[:-1])}_png"
+        folder_path.mkdir(parents=True, exist_ok=True)
+
+        # loop over all processed .wav files
+        for audio_path in processed_folder.glob("*.wav"):
+
+            # feature extraction from an audio file
+            audio, sr = librosa.load(audio_path, sr=22050)
+            obj = FeatureExtractor(audio, sr)
+            stretched, pitched, noisy = obj.augment_audio()
+
+            # store all the versions(audio, stretched, pitched, noisy) of the audio file
+            for audio_version, version_name in zip([audio, stretched, pitched, noisy], ['audio', 'stretched', 'pitched', 'noisy']):
+                # create mel spectrogram
+                mel_db = obj.generate_melspectrogram(audio_version)
+
+                # save
+                file_path = f"{audio_path.stem}_{version_name}".with_suffix('.png')
+                output_path = folder_path / file_path
+                if output_path.exists():
+                    logger.info("Already exist: %s", output_path)
+                    continue
+                else:
                     obj.save_spectrogram(mel_db, output_path)
                     logger.info("Saved: %s", output_path)
-                logger.info("Extracted: %s", audio_path)
-            except Exception as e:
-                logger.error("Skipping %s: %s", audio_path, e)
 
 def dataset(split):
     obj = BirdSplitDataset("../models/split_index.json", split=split)
