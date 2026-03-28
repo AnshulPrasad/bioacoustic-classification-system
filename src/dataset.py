@@ -66,7 +66,7 @@ class BirdSoundDataset():
         keep = {"call", "song", "alarm call", "flight call"}
         df = df[df["type"].isin(keep)]
 
-        return df, valid_ids
+        return df
 
     def grouped_files(self):
         _, valid_ids = self.id_label()
