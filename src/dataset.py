@@ -77,12 +77,9 @@ class BirdSoundDataset():
                 grouped_files[rec_id].append(f)
         return grouped_files
 
-    def stratify(self):
-        df, valid_ids = self.id_label()
-        grouped_files = self.grouped_files()
-
-        ids_types = df.drop_duplicates('id').set_index('id')['type']
-        unique_ids = [i for i in grouped_files.keys() if i in ids_types.index]
+    def ids_and_labels(self):
+        ids_types = self.df.drop_duplicates("id").set_index("id")["type"]
+        unique_ids = [i for i in self.grouped_files_list.keys() if i in ids_types.index]
         labels_for_unique_ids = [ids_types[i] for i in unique_ids]
         return unique_ids, labels_for_unique_ids
 
