@@ -20,7 +20,7 @@ class Species:
             self.data = r.json()
         self.english_name = '_'.join(self.data["recordings"][0]['en'].replace('-', ' ').split(' '))
 
-    def page_recordings(self, page): # get metadata of all recordings in the page
+    def page_records(self, page: int):
         page_url = self.base_url + '&page=' + str(page)
         with requests.get(page_url) as r:
             page_data = r.json()
@@ -95,7 +95,7 @@ class Species:
         except Exception as e:
             logger.warning("❌ Failed %s: %s", metadata['id'], e)
 
-    def write_csv(self):
+    def write_csv(self, records: list):
         with open(f'{self.RAW_DIR}/{self.english_name}.csv', 'w', encoding='utf-8', newline='') as f: # Write information in .csv file
             writer = csv.DictWriter(f, fieldnames=self.rows[0].keys())
             writer.writeheader()
