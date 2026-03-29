@@ -1,0 +1,24 @@
+name: Keep HF Space Awake
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'   # every 12 hours
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Space (3 retries)
+        run: |
+          for i in 1 2 3; do
+            STATUS=$(curl -o /dev/null -s -w "%{http_code}" -L 'https://huggingface.co/spaces/AnshulPrasad/avian-vocal-classification-system')
+            echo "Attempt $i: HTTP $STATUS"
+            if [ "$STATUS" -eq 200 ]; then
+              echo "Space is awake!"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "All attempts failed" >&2
+          exit 1
