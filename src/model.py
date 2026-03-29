@@ -9,7 +9,8 @@ import torch.nn as nn
 class Model:
     def __init__(self): ...
 
-    def build_model(self, num_classes: int, freeze_backbone: bool=True):
+    @ staticmethod
+    def build_model(num_classes: int, freeze_backbone: bool=False):
         model = models.efficientnet_b0(weights='IMAGENET1K_V1')
 
         if freeze_backbone:
