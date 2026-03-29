@@ -24,7 +24,11 @@ class Train:
         self.epochs = epochs
         self.lr = lr
 
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr, weight_decay=1e-4)
+        self.optimizer = torch.optim.Adam([
+            {"params": self.model.features.parameters(), "lr": 1e-5},
+            {"params": self.model.classifier.parameters(), "lr": 1e-4}],
+            weight_decay=1e-4
+        )
         self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             self.optimizer, mode='max', factor=0.5, patience=2, verbose=True
         )
