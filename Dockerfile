@@ -21,8 +21,7 @@ WORKDIR $HOME/app
 # 1. Install dependencies first (for better caching)
 COPY --chown=user requirements.txt .
 # Install CPU-specific torch to save massive amounts of time/space
-RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
 
 # 2. Copy the rest of the app
 COPY --chown=user . .
