@@ -12,7 +12,7 @@ if SRC_DIR not in sys.path:
     sys.path.append(SRC_DIR)
 
 # Now we can safely import your ML code!
-from src.predict import Predictor
+from predict import Predictor
 
 from huggingface_hub import hf_hub_download
 
