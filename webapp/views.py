@@ -14,6 +14,13 @@ if SRC_DIR not in sys.path:
 # Now we can safely import your ML code!
 from src.predict import Predictor
 
+from huggingface_hub import hf_hub_download
+
+model_path = hf_hub_download(
+    repo_id="AnshulPrasad/avian-vocal-classification-system",  # your model repo
+    filename="best_model.pth"
+)
+
 # Initialize the model globally (using absolute paths to be safe)
 PREDICTOR = Predictor(
     model_path=os.path.join(settings.BASE_DIR, "models", "checkpoints", "best_model.pth"),
