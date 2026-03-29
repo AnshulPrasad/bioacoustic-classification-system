@@ -1,3 +1,10 @@
+title: Avian Vocal Classification System
+emoji: 🦜
+colorFrom: green
+colorTo: blue
+sdk: docker
+app_port: 7860
+
 # Avian Vocal Classification System
 
 **Avian Vocal Classification System** is an end-to-end pipeline for **bird vocalization classification** using recordings from [Xeno-canto](https://xeno-canto.org/). The project targets **Indian bird species for data collection**, but the **trained model predicts vocalization type** (e.g. call, song, alarm call, flight call) using Xeno-canto metadata—not species identity.
