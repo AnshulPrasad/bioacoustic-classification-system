@@ -10,7 +10,7 @@ logger = get_logger(__name__, 'download.log')
 load_dotenv()
 API_KEY = os.getenv('XENO_CANTO_API_KEY')
 if not API_KEY:
-    raise ValueError("XENO_CANTO_API_KEY is not set")
+    logger.warning("XENO_CANTO_API_KEY is not set. Downloading will be disabled.")
 
 class Species:
     def __init__(self, species: str, raw_dir: Path):
